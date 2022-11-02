@@ -1,4 +1,4 @@
-# Escape from Tarkov wiki bot
+# Escape from Tarkov Discord bot
 
 [![Add to Discord](https://img.shields.io/static/v1?label=&message=Add%20to%20Discord&color=7289da&logo=discord&labelColor=424549)](https://discord.com/api/oauth2/authorize?client_id=1037063623350161470&permissions=0&scope=bot)
 
