@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+MARKET_URL = os.environ.get("MARKET_URL", "https://tarkov-market.com/item/{query}")
 SEARCH_URL = os.environ.get(
     "SEARCH_URL",
     "https://escapefromtarkov.fandom.com/wiki/Special:Search?query={query}&scope=internal&navigationSearch=true",
@@ -23,8 +24,12 @@ tarkov_command_group = discord.app_commands.Group(
 )
 
 
+def format_str(str):
+    return urllib.parse.quote_plus(str.replace(" ", "_"))
+
+
 def item_details_url(item):
-    safe_item = urllib.parse.quote_plus(item.replace(" ", "_"))
+    safe_item = format_str(item)
     url = ITEM_DETAILS_URL.format(item=safe_item)
     # headers = {"User-Agent": USER_AGENT}
     # return requests.get(url, headers=headers)
@@ -52,6 +57,34 @@ def get_search_results(query):
 
 
 @tarkov_command_group.command()
+@discord.app_commands.describe(query="Price check query")
+async def price(interaction: discord.Interaction, query: str):
+    try:
+        url = MARKET_URL.format(query=format_str(query))
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, "html.parser")
+        results = soup.find("div", class_="d-flex")
+        prices = [r.text for r in results]
+        avg_prices = prices[4].split()
+        avg_24h = avg_prices[4][:-1]
+        avg_7d = avg_prices[7][:-1]
+        embed = discord.Embed(
+            title=f"'{query}' Price Results",
+            url=url,
+            color=discord.Color.blue(),
+        )
+        embed.set_author(
+            name="TarkovBot", url="https://github.com/fredericojordan/tarkovbot"
+        )
+        embed.add_field(name="24 hours average:", value=avg_24h, inline=False)
+        embed.add_field(name="7 days average:", value=avg_7d, inline=False)
+        await interaction.response.send_message(embed=embed)
+    except Exception as e:
+        print(e)
+        await interaction.response.send_message(f"Error fetching '{query}' price.")
+
+
+@tarkov_command_group.command()
 @discord.app_commands.describe(query="Search query")
 async def search(interaction: discord.Interaction, query: str):
     """Search Escape from Tarkov wiki"""
@@ -68,7 +101,9 @@ async def search(interaction: discord.Interaction, query: str):
         description=description,
         color=discord.Color.blue(),
     )
-    embed.set_author(name="TarkovBot", url="https://github.com/fredericojordan/tarkovbot")
+    embed.set_author(
+        name="TarkovBot", url="https://github.com/fredericojordan/tarkovbot"
+    )
     for r in results[:max_results]:
         item = urllib.parse.unquote(r.split("/")[-1].replace("_", " "))
         embed.add_field(name=item, value=r, inline=False)
@@ -83,7 +118,9 @@ async def details(interaction: discord.Interaction, item: str):
     embed = discord.Embed(
         title=item, url=url, description=item, color=discord.Color.blue()
     )
-    embed.set_author(name="TarkovBot", url="https://github.com/fredericojordan/tarkovbot")
+    embed.set_author(
+        name="TarkovBot", url="https://github.com/fredericojordan/tarkovbot"
+    )
     await interaction.response.send_message(embed=embed)
 
 
