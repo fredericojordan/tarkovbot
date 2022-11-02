@@ -86,11 +86,18 @@ async def details(interaction: discord.Interaction, item: str):
     await interaction.response.send_message(embed=embed)
 
 
+@discord.app_commands.command()
+async def poyta(interaction: discord.Interaction):
+    """Poyta bio."""
+    await interaction.response.send_message("Poyta é um bundão!")
+
+
 class TarkovBot(discord.Client):
     def __init__(self, *, intents: discord.Intents):
         super().__init__(intents=intents)
         self.command_tree = discord.app_commands.CommandTree(self)
         self.command_tree.add_command(tarkov_command_group)
+        self.command_tree.add_command(poyta)
 
     async def setup_hook(self):
         await self.command_tree.sync()

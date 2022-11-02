@@ -3,7 +3,8 @@
 [![Add to Discord](https://img.shields.io/static/v1?label=&message=Add%20to%20Discord&color=7289da&logo=discord&labelColor=424549)](https://discord.com/api/oauth2/authorize?client_id=1037063623350161470&permissions=0&scope=bot)
 
 1. `/tarkov search <query>`
-1. `/tarkov details <item>`
+2. `/tarkov details <item>`
+3. `/poyta`
 
 ## Quickstart
 
