@@ -1,5 +1,6 @@
 import os
 import urllib.parse
+from random import choice
 
 import discord
 import requests
@@ -89,7 +90,8 @@ async def details(interaction: discord.Interaction, item: str):
 @discord.app_commands.command()
 async def poyta(interaction: discord.Interaction):
     """Poyta bio."""
-    await interaction.response.send_message("Poyta é um bundão!")
+    adjetivos = ["um bundão", "noob d+", "um cara legal", "muito ruim de mira"]
+    await interaction.response.send_message(f"Poyta é {choice(adjetivos)}!")
 
 
 class TarkovBot(discord.Client):
