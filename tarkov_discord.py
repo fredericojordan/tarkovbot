@@ -68,7 +68,7 @@ async def search(interaction: discord.Interaction, query: str):
         description=description,
         color=discord.Color.blue(),
     )
-    embed.set_author(name="TarkovBot", url="https://github.com/fredericojordan")
+    embed.set_author(name="TarkovBot", url="https://github.com/fredericojordan/tarkovbot")
     for r in results[:max_results]:
         item = urllib.parse.unquote(r.split("/")[-1].replace("_", " "))
         embed.add_field(name=item, value=r, inline=False)
@@ -83,7 +83,7 @@ async def details(interaction: discord.Interaction, item: str):
     embed = discord.Embed(
         title=item, url=url, description=item, color=discord.Color.blue()
     )
-    embed.set_author(name="TarkovBot", url="https://github.com/fredericojordan")
+    embed.set_author(name="TarkovBot", url="https://github.com/fredericojordan/tarkovbot")
     await interaction.response.send_message(embed=embed)
 
 
