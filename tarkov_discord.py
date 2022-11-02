@@ -65,6 +65,8 @@ async def price(interaction: discord.Interaction, query: str):
         soup = BeautifulSoup(response.text, "html.parser")
         results = soup.find("div", class_="d-flex")
         prices = [r.text for r in results]
+        flea_prices = prices[0].split()
+        flea_price = flea_prices[2][:-1]
         avg_prices = prices[4].split()
         avg_24h = avg_prices[4][:-1]
         avg_7d = avg_prices[7][:-1]
@@ -76,6 +78,7 @@ async def price(interaction: discord.Interaction, query: str):
         embed.set_author(
             name="TarkovBot", url="https://github.com/fredericojordan/tarkovbot"
         )
+        embed.add_field(name="Flea price:", value=flea_price, inline=False)
         embed.add_field(name="24 hours average:", value=avg_24h, inline=False)
         embed.add_field(name="7 days average:", value=avg_7d, inline=False)
         await interaction.response.send_message(embed=embed)
